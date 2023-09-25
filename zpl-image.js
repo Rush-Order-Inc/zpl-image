@@ -1,5 +1,8 @@
 import { decode as atob, encode as btoa } from "base-64";
 const pako = require("pako");
+import { Buffer } from "buffer";
+import { Gif } from "gifwrap";
+import { GifCodec } from "gifwrap";
 
 (function (root, factory) {
   if (typeof define === "function" && define.amd) {
@@ -451,5 +454,34 @@ const pako = require("pako");
     return "0000".substr(crc.length) + crc;
   }
 
-  return { rgbaToZ64, rgbaToACS, imageToZ64, imageToACS };
+  const gifToZpl = async (buffer) => {
+    const codec = new GifCodec();
+    return codec
+      .decodeGif(buffer)
+      .then((sourceGif) => {
+        const firstFrame = sourceGif.frames[0];
+
+        // you might want to rotate L to be in line with PDF prints,
+        // but UPC purchase number 2d scan makes label slightly too long
+        // causing label to shift upward cut off top
+        let result = rgbaToZ64(
+          firstFrame.bitmap.data,
+          firstFrame.bitmap.width,
+          {
+            black: 47,
+            rotate: "R",
+          }
+        );
+
+        const zpl = `
+			^XA^LH0,0^FWN^PON^PMN^LRN
+			^FO15,10^GFA,${result.length},${result.length},${result.rowlen},${result.z64}
+			^XZ`;
+
+        return zpl;
+      })
+      .catch((err) => err);
+  };
+
+  return { rgbaToZ64, rgbaToACS, imageToZ64, imageToACS, gifToZpl };
 });

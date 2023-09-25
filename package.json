@@ -30,6 +30,8 @@
   },
   "dependencies": {
     "base-64": "^1.0.0",
+    "buffer": "^6.0.3",
+    "gifwrap": "^0.10.1",
     "pako": "^2.1.0"
   }
 }

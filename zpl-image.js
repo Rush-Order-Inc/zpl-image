@@ -1,7 +1,5 @@
 import { decode as atob, encode as btoa } from "base-64";
 const pako = require("pako");
-import { Buffer } from "buffer";
-import { Gif } from "gifwrap";
 import { GifCodec } from "gifwrap";
 
 (function (root, factory) {
@@ -454,6 +452,7 @@ import { GifCodec } from "gifwrap";
     return "0000".substr(crc.length) + crc;
   }
 
+  //Takes in Buffer and retursn Promise<string>
   const gifToZpl = async (buffer) => {
     const codec = new GifCodec();
     return codec

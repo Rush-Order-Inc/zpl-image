@@ -27,5 +27,9 @@
   "homepage": "https://github.com/metafloor/zpl-image",
   "directories": {
     "test": "tests"
+  },
+  "dependencies": {
+    "base-64": "^1.0.0",
+    "pako": "^2.1.0"
   }
 }

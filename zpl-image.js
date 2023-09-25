@@ -14,13 +14,6 @@ const pako = require("pako");
     }
   }
 })(typeof self !== "undefined" ? self : this, function () {
-  const zlib =
-    typeof process == "object" &&
-    typeof process.release == "object" &&
-    process.release.name == "node"
-      ? null
-      : null;
-
   const hexmap = (() => {
     let arr = Array(256);
     for (let i = 0; i < 16; i++) {
@@ -62,7 +55,7 @@ const pako = require("pako");
     return rgbaToACS(pixels.data, pixels.width, opts);
   }
 
-  // Uses zlib on node.js, pako.js in the browser.
+  // Uses pako.js in the browser.
   //
   // `rgba` can be a Uint8Array or Buffer, or an Array of integers between 0 and 255.
   // `width` is the image width, in pixels
@@ -108,11 +101,7 @@ const pako = require("pako");
     let imgh = buf.height;
     let rowl = ~~((imgw + 7) / 8);
     let b64;
-    if (zlib) {
-      b64 = zlib.deflateSync(buf).toString("base64");
-    } else {
-      b64 = u8tob64(pako.deflate(buf));
-    }
+    b64 = u8tob64(pako.deflate(buf));
 
     // Example usage of the return value `rv`:
     //		'^GFA,' + rv.length + ',' + rv.length + ',' + rv.rowlen + ',' + rv.z64
@@ -462,7 +451,5 @@ const pako = require("pako");
     return "0000".substr(crc.length) + crc;
   }
 
-  return zlib
-    ? { rgbaToZ64, rgbaToACS }
-    : { rgbaToZ64, rgbaToACS, imageToZ64, imageToACS };
+  return { rgbaToZ64, rgbaToACS, imageToZ64, imageToACS };
 });

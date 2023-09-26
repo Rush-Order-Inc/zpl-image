@@ -31,7 +31,7 @@
   "dependencies": {
     "base-64": "^1.0.0",
     "buffer": "^6.0.3",
-    "gifwrap": "github:jseang-ro/gifwrap",
+    "gifwrap": "github:Rush-Order-Inc/gifwrap",
     "pako": "^2.1.0"
   }
 }

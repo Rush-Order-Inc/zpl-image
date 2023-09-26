@@ -453,7 +453,12 @@ import { GifCodec } from "gifwrap";
   }
 
   //Takes in Buffer and retursn Promise<string>
-  const gifToZpl = async (buffer) => {
+  const gifToZpl = async (
+    buffer,
+    rotation = "R",
+    xOffset = 15,
+    yOffset = 10
+  ) => {
     const codec = new GifCodec();
     return codec
       .decodeGif(buffer)
@@ -468,13 +473,13 @@ import { GifCodec } from "gifwrap";
           firstFrame.bitmap.width,
           {
             black: 47,
-            rotate: "R",
+            rotate: rotation,
           }
         );
 
         const zpl = `
 			^XA^LH0,0^FWN^PON^PMN^LRN
-			^FO15,10^GFA,${result.length},${result.length},${result.rowlen},${result.z64}
+			^FO${xOffset},${yOffset}^GFA,${result.length},${result.length},${result.rowlen},${result.z64}
 			^XZ`;
 
         return zpl;
